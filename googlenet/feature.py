@@ -16,7 +16,7 @@ from keras.applications.inception_v3 import InceptionV3, preprocess_input
 from keras.preprocessing import image
 from keras.models import Model
 from keras.models import model_from_json
-from keras.layers import Input
+from keras.layers import Input, MaxPooling2D
 
 # other imports
 from sklearn.preprocessing import LabelEncoder
@@ -67,7 +67,8 @@ elif model_name == "resnet50":
     image_size = (224, 224)
 elif model_name == "inceptionv3":
     base_model = InceptionV3(include_top=include_top, weights=weights, input_tensor=Input(shape=(299, 299, 3)))
-    model = Model(input=base_model.input, output=base_model.layers[-1].output)
+    pool = MaxPooling2D()
+    model = Model(input=base_model.input, output=pool(base_model.layers[-1].output))
     image_size = (299, 299)
 elif model_name == "inceptionresnetv2":
     base_model = InceptionResNetV2(include_top=include_top, weights=weights, input_tensor=Input(shape=(299, 299, 3)))
