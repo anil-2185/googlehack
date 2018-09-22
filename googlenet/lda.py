@@ -1,6 +1,5 @@
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 # organize imports
-from __future__ import print_function
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
