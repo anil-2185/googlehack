@@ -72,6 +72,7 @@ elif model_name == "inceptionv3":
     image_size = (299, 299)
 elif model_name == "inceptionresnetv2":
     base_model = InceptionResNetV2(include_top=include_top, weights=weights, input_tensor=Input(shape=(299, 299, 3)))
+    pdb.set_trace()
     model = Model(input=base_model.input, output=base_model.get_layer('custom').output)
     image_size = (299, 299)
 elif model_name == "mobilenet":
