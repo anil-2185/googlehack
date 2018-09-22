@@ -75,14 +75,14 @@ for r in f:
 f.close()
 
 # evaluate the model of test data
-preds = model.predict_proba(test)
+preds = model.predict(test)
 labels = sorted(list(os.listdir(train_path)))
 
 f = open(results, "w")
 f.write("Filename,Category\n")
 for i, name in enumerate(filenames):
     # write the classification report to file
-    f.write("{},{}\n".format(name, preds[i]))
+    f.write("{},{}\n".format(name, labels[preds[i]]))
 f.close()
 
 # dump classifier to file
