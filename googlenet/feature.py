@@ -3,7 +3,7 @@ import warnings
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
 import os
-os.environ['KERAS_BACKEND'] = 'tensorflow
+os.environ['KERAS_BACKEND'] = 'tensorflow'
 
 # keras imports
 from keras.applications.vgg16 import VGG16, preprocess_input
