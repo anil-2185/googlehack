@@ -4,6 +4,7 @@ from __future__ import print_function
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix
 import numpy as np
 import h5py
@@ -65,7 +66,7 @@ print ("[INFO] test labels : {}".format(testLabels.shape))
 
 # use logistic regression as the model
 print ("[INFO] creating model...")
-model = LogisticRegression(random_state=seed)
+model = GaussianNB(random_state=seed)
 model.fit(trainData, trainLabels)
 
 # use rank-1 and rank-5 predictions
