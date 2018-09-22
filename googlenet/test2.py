@@ -27,7 +27,6 @@ classifier_pat = config["classifier_path"]
 test_features_path = config["test_features"]
 train_path = config["train_path"]
 num_classes = config["num_classes"]
-test_index = config["test_index"]
 classifier_path = config["classifier_path"]
 
 # import features and labels
@@ -43,43 +42,66 @@ features = np.array(features_string)
 labels = np.array(labels_string)
 test = np.array(test_string)
 
-h5f_test.close()
 h5f_data.close()
 h5f_label.close()
+h5f_test.close()
 
 # verify the shape of features and labels
 print ("[INFO] features shape: {}".format(features.shape))
 print ("[INFO] labels shape: {}".format(labels.shape))
 
+print ("[INFO] training started...")
+# split the training and testing data
+(trainData, testData, trainLabels, testLabels) = train_test_split(np.array(features),
+                                                                  np.array(labels),
+                                                                  test_size=test_size,
+                                                                  random_state=seed)
 
 print ("[INFO] splitted train and test data...")
-print ("[INFO] train data  : {}".format(features.shape))
-print ("[INFO] test data   : {}".format(test.shape))
-print ("[INFO] train labels: {}".format(labels.shape))
+print ("[INFO] train data  : {}".format(trainData.shape))
+print ("[INFO] test data   : {}".format(testData.shape))
+print ("[INFO] train labels: {}".format(trainLabels.shape))
+print ("[INFO] test labels : {}".format(testLabels.shape))
 
 # use logistic regression as the model
 print ("[INFO] creating model...")
 model = LogisticRegression(random_state=seed)
-model.fit(features, labels)
+model.fit(trainData, trainLabels)
 
 # use rank-1 and rank-5 predictions
 print ("[INFO] evaluating model...")
+f = open(results, "w")
+rank_1 = 0
+rank_5 = 0
 
-filenames = []
-f = open(test_index, "r")
-for r in f:
-    filenames.append(r.strip())
-f.close()
+# loop over test data
+for (label, features) in zip(testLabels, testData):
+    # predict the probability of each class label and
+    # take the top-5 class labels
+    predictions = model.predict_proba(np.atleast_2d(features))[0]
+    predictions = np.argsort(predictions)[::-1][:5]
+
+    # rank-1 prediction increment
+    if label == predictions[0]:
+        rank_1 += 1
+
+    # rank-5 prediction increment
+    if label in predictions:
+        rank_5 += 1
+
+# convert accuracies to percentages
+rank_1 = (rank_1 / float(len(testLabels))) * 100
+rank_5 = (rank_5 / float(len(testLabels))) * 100
+
+# write the accuracies to file
+f.write("Rank-1: {:.2f}%\n".format(rank_1))
+f.write("Rank-5: {:.2f}%\n\n".format(rank_5))
 
 # evaluate the model of test data
-preds = model.predict(test)
-labels = sorted(list(os.listdir(train_path)))
+preds = model.predict(testData)
 
-f = open(results, "r")
-f.write("Filename,Category\n")
-for i, name in enumerate(filenames):
-    # write the classification report to file
-    f.write("{},{}\n".format(name, labels[preds[i]]))
+# write the classification report to file
+f.write("{}\n".format(classification_report(testLabels, preds)))
 f.close()
 
 # dump classifier to file
@@ -88,3 +110,13 @@ pickle.dump(model, open(classifier_path, 'wb'))
 
 # display the confusion matrix
 print ("[INFO] confusion matrix")
+
+# get the list of training lables
+labels = sorted(list(os.listdir(train_path)))
+
+# plot the confusion matrix
+cm = confusion_matrix(testLabels, preds)
+# sns.heatmap(cm,
+#             annot=True,
+#             cmap="Set2")
+# plt.show()
