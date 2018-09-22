@@ -72,7 +72,7 @@ elif model_name == "inceptionv3":
     image_size = (299, 299)
 elif model_name == "inceptionresnetv2":
     base_model = InceptionResNetV2(include_top=include_top, weights=weights, input_tensor=Input(shape=(299, 299, 3)))
-    model = Model(input=base_model.input, output=base_model.base_model.layers[-2].output)
+    model = Model(input=base_model.input, output=base_model.layers[-2].output)
     image_size = (299, 299)
 elif model_name == "mobilenet":
     base_model = MobileNet(include_top=include_top, weights=weights, input_tensor=Input(shape=(224, 224, 3)), input_shape=(224, 224, 3))

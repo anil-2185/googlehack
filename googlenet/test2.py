@@ -66,8 +66,8 @@ print ("[INFO] test labels : {}".format(testLabels.shape))
 
 # use logistic regression as the model
 print ("[INFO] creating model...")
-# model = LogisticRegression(random_state=seed)
-model = GaussianNB()
+model = LogisticRegression(random_state=seed)
+# model = GaussianNB()
 model.fit(trainData, trainLabels)
 
 # use rank-1 and rank-5 predictions
