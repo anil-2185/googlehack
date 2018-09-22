@@ -39,6 +39,7 @@ include_top = config["include_top"]
 train_path = config["train_path"]
 features_path = config["features_path"]
 labels_path = config["labels_path"]
+test_path = config["test_path"]
 test_size = config["test_size"]
 results = config["results"]
 model_path = config["model_path"]
@@ -64,6 +65,7 @@ elif model_name == "resnet50":
     image_size = (224, 224)
 elif model_name == "inceptionv3":
     base_model = InceptionV3(include_top=include_top, weights=weights, input_tensor=Input(shape=(299, 299, 3)))
+    pdb.set_trace()
     model = Model(input=base_model.input, output=base_model.layers[-1].output)
     image_size = (299, 299)
 elif model_name == "inceptionresnetv2":
@@ -85,7 +87,7 @@ print ("[INFO] successfully loaded base model and model...")
 
 # path to training dataset
 train_labels = os.listdir(train_path)
-
+test_labels = os.listdir(test_path)
 # encode the labels
 print ("[INFO] encoding labels...")
 le = LabelEncoder()
@@ -93,43 +95,61 @@ le.fit([tl for tl in train_labels])
 
 # variables to hold features and labels
 features = []
+test_features = []
 labels = []
+
+# # loop over all the labels in the folder
+# count = 1
+# for i, label in enumerate(train_labels):
+#     cur_path = train_path + "/" + label
+#     count = 1
+#     for image_path in glob.glob(cur_path + "/*.jpg"):
+#         img = image.load_img(image_path, target_size=image_size)
+#         x = image.img_to_array(img)
+#         x = np.expand_dims(x, axis=0)
+#         x = preprocess_input(x)
+#         feature = model.predict(x)
+#         flat = feature.flatten()
+#         features.append(flat)
+#         labels.append(label)
+#         print ("[INFO] processed - " + str(count))
+#         count += 1
+#     print ("[INFO] completed label - " + label)
+
 
 # loop over all the labels in the folder
 count = 1
-for i, label in enumerate(train_labels):
-    cur_path = train_path + "/" + label
+for i, label in enumerate(test_labels):
+    cur_path = test_path + "/" + label
     count = 1
-    for image_path in glob.glob(cur_path + "/*.jpg"):
-        img = image.load_img(image_path, target_size=image_size)
-        x = image.img_to_array(img)
-        x = np.expand_dims(x, axis=0)
-        x = preprocess_input(x)
-        feature = model.predict(x)
-        flat = feature.flatten()
-        features.append(flat)
-        labels.append(label)
-        print ("[INFO] processed - " + str(count))
-        count += 1
+    img = image.load_img(cur_path, target_size=image_size)
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    x = preprocess_input(x)
+    feature = model.predict(x)
+    flat = feature.flatten()
+    test_features.append(flat)
+    print ("[INFO] processed - " + str(count))
+    count += 1
     print ("[INFO] completed label - " + label)
 
-# encode the labels using LabelEncoder
-le = LabelEncoder()
-le_labels = le.fit_transform(labels)
+# # encode the labels using LabelEncoder
+# le = LabelEncoder()
+# le_labels = le.fit_transform(labels)
 
 # get the shape of training labels
-print ("[STATUS] training labels: {}".format(le_labels))
-print ("[STATUS] training labels shape: {}".format(le_labels.shape))
+# print ("[STATUS] training labels: {}".format(le_labels))
+# print ("[STATUS] training labels shape: {}".format(le_labels.shape))
 
 # save features and labels
 h5f_data = h5py.File(features_path, 'w')
 h5f_data.create_dataset('dataset_1', data=np.array(features))
 
-h5f_label = h5py.File(labels_path, 'w')
-h5f_label.create_dataset('dataset_1', data=np.array(le_labels))
+# h5f_label = h5py.File(labels_path, 'w')
+# h5f_label.create_dataset('dataset_1', data=np.array(le_labels))
 
 h5f_data.close()
-h5f_label.close()
+# h5f_label.close()
 
 # save model and weights
 model_json = model.to_json()

@@ -10,6 +10,7 @@
   "results"         : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/results.txt",
   "classifier_path" : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/classifier.pickle",
   "model_path"      : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/model",
+  "test_features"   : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/test_features.h5",
 
   "test_size"       : 0.10,
   "seed"            : 9,
