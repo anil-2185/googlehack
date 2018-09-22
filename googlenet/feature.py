@@ -38,6 +38,7 @@ weights = config["weights"]
 include_top = config["include_top"]
 train_path = config["train_path"]
 features_path = config["features_path"]
+test_features_path = config["test_features"]
 labels_path = config["labels_path"]
 test_path = config["test_path"]
 test_size = config["test_size"]
@@ -142,26 +143,30 @@ for i, label in enumerate(test_labels):
 # print ("[STATUS] training labels shape: {}".format(le_labels.shape))
 
 # save features and labels
-h5f_data = h5py.File(features_path, 'w')
-h5f_data.create_dataset('dataset_1', data=np.array(features))
+# h5f_data = h5py.File(features_path, 'w')
+# h5f_data.create_dataset('dataset_1', data=np.array(features))
 
 # h5f_label = h5py.File(labels_path, 'w')
 # h5f_label.create_dataset('dataset_1', data=np.array(le_labels))
 
-h5f_data.close()
+# h5f_data.close()
 # h5f_label.close()
 
-# save model and weights
-model_json = model.to_json()
-with open(model_path + str(test_size) + ".json", "w") as json_file:
-    json_file.write(model_json)
+h5f_test = h5py.File(test_features_path, 'w')
+h5f_test.create_dataset('dataset_1', data=np.array(test_features))
+h5f_test.close()
 
-# save weights
-model.save_weights(model_path + str(test_size) + ".h5")
-print("[STATUS] saved model and weights to disk..")
-
-print ("[STATUS] features and labels saved..")
-
-# end time
+# # save model and weights
+# model_json = model.to_json()
+# with open(model_path + str(test_size) + ".json", "w") as json_file:
+#     json_file.write(model_json)
+#
+# # save weights
+# model.save_weights(model_path + str(test_size) + ".h5")
+# print("[STATUS] saved model and weights to disk..")
+#
+# print ("[STATUS] features and labels saved..")
+#
+# # end time
 end = time.time()
 print ("[STATUS] end time - {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M")))
