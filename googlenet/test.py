@@ -10,8 +10,8 @@ import h5py
 import os
 import json
 import pickle
-import seaborn as sns
-import matplotlib.pyplot as plt
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 
 # load the user configs
 with open('conf.json') as f:
