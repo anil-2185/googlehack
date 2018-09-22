@@ -1,5 +1,5 @@
 {
-  "model"           : "inceptionresnetv23",
+  "model"           : "inceptionresnetv2",
   "weights"         : "imagenet",
   "include_top"     : false,
 
