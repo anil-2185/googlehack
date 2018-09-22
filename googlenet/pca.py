@@ -1,4 +1,4 @@
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+from sklearn.decomposition import PCA
 # organize imports
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
@@ -61,7 +61,7 @@ print ("[INFO] train labels: {}".format(labels.shape))
 # use logistic regression as the model
 print ("[INFO] creating model...")
 
-model = LDA(n_components=)
+model = PCA(n_components=2000)
 data = model.fit_transform(features, labels)
 test_data = model.transform(test)
 
