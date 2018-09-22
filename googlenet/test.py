@@ -75,7 +75,7 @@ f.close()
 preds = model.predict(test)
 labels = sorted(list(os.listdir(train_path)))
 
-f = open(results, "r")
+f = open(results, "w")
 f.write("Filename,Category\n")
 for i, name in enumerate(filenames):
     # write the classification report to file
