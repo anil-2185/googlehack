@@ -12,6 +12,8 @@
   "model_path"      : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/model",
   "test_features"   : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/test_features.h5",
   "test_index"      : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/test_index.txt",
+  "reduce_features" : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/reduce_features.h5",
+  "reduce_test"     : "/ssd_scratch/cvit/ashutosh.mishra/Kagglecomp/Hackathon/output/waste/inceptionv3/reduce_test.h5",
 
   "test_size"       : 0.10,
   "seed"            : 9,

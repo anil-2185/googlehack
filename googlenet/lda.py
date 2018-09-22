@@ -1,9 +1,17 @@
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+# organize imports
+from __future__ import print_function
+from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
 import numpy as np
 import h5py
-
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+import os
 import json
-
+import pickle
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 
 # load the user configs
 with open('conf.json') as f:
@@ -19,6 +27,9 @@ classifier_pat = config["classifier_path"]
 test_features_path = config["test_features"]
 train_path = config["train_path"]
 num_classes = config["num_classes"]
+test_index = config["test_index"]
+reduce_features = config["reduce_features"]
+reduce_test = config["reduce_test"]
 classifier_path = config["classifier_path"]
 
 # import features and labels
@@ -34,23 +45,30 @@ features = np.array(features_string)
 labels = np.array(labels_string)
 test = np.array(test_string)
 
+h5f_test.close()
 h5f_data.close()
 h5f_label.close()
-h5f_test.close()
 
 # verify the shape of features and labels
 print ("[INFO] features shape: {}".format(features.shape))
 print ("[INFO] labels shape: {}".format(labels.shape))
 
-print ("[INFO] training started...")
-# split the training and testing data
-(trainData, testData, trainLabels, testLabels) = train_test_split(np.array(features),
-                                                                  np.array(labels),
-                                                                  test_size=test_size,
-                                                                  random_state=seed)
 
 print ("[INFO] splitted train and test data...")
-print ("[INFO] train data  : {}".format(trainData.shape))
-print ("[INFO] test data   : {}".format(testData.shape))
-print ("[INFO] train labels: {}".format(trainLabels.shape))
-print ("[INFO] test labels : {}".format(testLabels.shape))
+print ("[INFO] train data  : {}".format(features.shape))
+print ("[INFO] test data   : {}".format(test.shape))
+print ("[INFO] train labels: {}".format(labels.shape))
+
+# use logistic regression as the model
+print ("[INFO] creating model...")
+
+model = LDA()
+data = model.fit_transform(features, labels)
+test_data = model.transform(test)
+
+print ("[INFO] writing...")
+h5f_data = h5py.File(reduce_features, 'w')
+h5f_data.create_dataset('dataset_1', data=np.array(data))
+
+h5f_data = h5py.File(reduce_test, 'w')
+h5f_data.create_dataset('dataset_1', data=np.array(test_data))
