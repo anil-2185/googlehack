@@ -26,6 +26,7 @@ import h5py
 import json
 import datetime
 import time
+import pdb
 
 # load the user configs
 with open('conf.json') as f:
@@ -63,6 +64,7 @@ elif model_name == "resnet50":
     image_size = (224, 224)
 elif model_name == "inceptionv3":
     base_model = InceptionV3(include_top=include_top, weights=weights, input_tensor=Input(shape=(299, 299, 3)))
+    pdb.set_trace()
     model = Model(input=base_model.input, output=base_model.get_layer('custom').output)
     image_size = (299, 299)
 elif model_name == "inceptionresnetv2":
